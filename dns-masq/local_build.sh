@@ -14,5 +14,6 @@ docker run -d \
   -e "HTTP_PASS=${HTTP_PASS}" \
   --restart always \
   sirscythe/dnsmasq-arm
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
+systemctl disable systemd-resolved.service
+service systemd-resolved stop
+rm /etc/resolv.con
