@@ -13,4 +13,8 @@ Additionally to get docker to start after reboot run:
 
 Docker network:
 - The current build_all.sh script is designed for use with https://github.com/iNethi/docker-master but can easily be altered
-- The use of this network and custom IPV4 addresses makes it easier to route traffic from a locally connected to containers hosting webpages or containers with a UI
+- The use of this network and custom IPV4 addresses makes it easier to route traffic from a locally connected device to containers hosting webpages or containers with a UI
+
+Installation:
+1. Edit the enviroment variables in the folders as you need
+2. From the home directory run build_all.sh with root priviledges
