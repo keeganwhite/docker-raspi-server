@@ -3,8 +3,6 @@ set -a # automatically export all variables
 source .env
 set +a
 mv dnsmasq.conf /opt
-systemctl stop systemd-resolved
-systemctl disable systemd-resolved
 docker run -d \
   --name inethi-dnsmasq \
   --cap-add=NET_ADMIN \
@@ -16,3 +14,5 @@ docker run -d \
   -e "HTTP_PASS=${HTTP_PASS}" \
   --restart always \
   sirscythe/dnsmasq-arm
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
