@@ -8,8 +8,8 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - </path/to/smokeping/config>:/config
-      - </path/to/smokeping/data>:/data
+      - ./:/config
+      - ./:/data
     ports:
       - 80:80
     restart: unless-stopped
