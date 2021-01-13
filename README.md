@@ -1,5 +1,5 @@
 # docker-raspi-server
-Docker containers to run on a raspberry pi 4 running Ubuntu Server 20.4 LTS (64-bit server with arm64 architecture)
+Docker containers to run on a raspberry pi 4 b with 4gb of ram running Ubuntu Server 20.4 LTS (64-bit server with arm64 architecture). I am using a 64gb SD card but an external hard drive will be needed to build the full iNethi environment mentioned below.
 
 I am using this server as a development enviroment for my iNethi (https://www.inethi.org.za) in Ocean View South Africa. View the docker containers this system is designed for: https://github.com/iNethi/docker-master
 
