@@ -20,7 +20,7 @@ Additionally to get docker to start after reboot run:
 
 ## Set up the iNethi environment
 
-To build the whole system on a server simply run the build script and follow the instructions displayed on screen. The majority of the process is automatic but there is one manual step. _Before_ you run the build script navigate to master-builder/traefik-with-dnsmasq/dnsmasq/dnsmasq.conf and edit the 6th line of this file to read as follows:
+To build the whole system on a server simply run the build script and follow the instructions displayed on screen. The majority of the process is automatic but there is one manual step. _Before_ you run the build script navigate to /traefik-with-dnsmasq/dnsmasq/dnsmasq.conf and edit the 6th line of this file to read as follows:
 address=/inethihome.net/_the ip address of your server_
 Where the 'the ip address of your server' is found using `ip a` or some equivalent. Find the ip address of the interface that you are connecting to your local network with on screen and use this ip address. This can be 'eth0', 'eth1', 'en0', etc. depending on what OS you are running. This is a vital step as the build script will disable your current dns settings on your device in order for the dnsmasq docker container to bind to port 53.
 
@@ -29,7 +29,11 @@ If your system fails to resolve requests following this you may be having errors
 Once you have chosen the containers you want to start the build script will create a docker bridge network, download the trafik and dnsmasq docker files and then disable your current dns settings so that the dnsmasq and traefik docker containers can be set up correctly. Following this the rest of the containers will be built.
 
 The build script can be starting by running:
-` sudo ./build_all.sh `
+
+```
+sudo ./build_all.sh
+```
+
 Note root privileges will be necessary.
 
 ## TODO
