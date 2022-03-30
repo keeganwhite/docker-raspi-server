@@ -1,0 +1,68 @@
+version: "3.3"
+
+services:
+  traefik:
+    image: "traefik:v2.5"
+    container_name: "inethi-traefikssl"
+    restart: unless-stopped
+    env_file: "./secrets/secret_keys.env"
+    command:
+      #- "--log.level=DEBUG"
+      
+      # Enable the Trafik dashboard
+      - --api.dashboard=true
+      
+      # Allow dashboard to use insecure connection
+      - --api.insecure=true
+      
+      # Tell Traefik to discover containers using the Docker API
+      - --providers.docker=true
+      
+      # Set up Lets Encrypt
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=route53
+      #- --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.letsencrypt.acme.email=<add your email here>
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      
+      # Set up an insecure listener that redirects all traffic to TLS
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+
+      #- --providers.docker.exposedbydefault=false"
+
+      # Set up the TLS configuration for our websecure listener
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
+      - "--entrypoints.websecure.http.tls.domains[0].main=${inethiDN}"
+      - "--entrypoints.websecure.http.tls.domains[0].sans=*.${inethiDN}"
+
+      # Diabled certificate verification between traefik and servivces with ssl like Unifi
+      - "--serversTransport.insecureSkipVerify=true"
+      
+    ports:
+      - 80:80
+      - 443:443
+      #- 8080:8080
+  
+
+    volumes:
+      - "/mnt/data/traefikssl/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+    labels:
+      - "traefik.enable=true"
+      #- "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_API_RULE_HOST}.${inethiDN}`)"
+      - "traefik.http.routers.traefik.rule=Host(`${inethiDN}`)"
+      - "traefik.http.routers.traefik.service=${TRAEFIK_API_SERVICE}"
+      - "traefik.http.routers.traefik.entrypoints=${TRAEFIK_ENTRYPOINT}"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      #- "traefik.http.routers.traefik.middlewares=strip"
+      #- "traefik.http.middlewares.strip.stripprefix.prefixes=/traefik"
+
+networks:
+  default:
+    external:
+      name: "${INETHI_NETWORK}"
